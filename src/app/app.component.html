@@ -1,0 +1,148 @@
+<div class="contenedor">
+  <div id="buttons" class="row p-2 col-12">
+    <button #iniciar id="iniciar" mat-raised-button color="warn" class="position-absolute top-50 start-50 translate-middle" *ngIf="this.state==0" [disabled]="isButtonDisabled" (click)="startCall()">Solicitar Asistencia</button>
+    <button #enCurso id="enCurso" mat-raised-button color="warn" class="m-2" *ngIf="this.state==1" (click)="cancelCall()">Cancelar LLamada</button>
+    <button #colgar id="colgar" mat-raised-button color="warn" class="m-2" *ngIf="this.state==2" (click)="endCall()">Terminar Llamada</button>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <div *ngIf="this.state>0" id="video-wrapper">
+        <div *ngIf="this.state==1" id="div" class='phone'>
+          <span class="material-icons">
+            call
+          </span>
+        </div>
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <video #remoteVideo id="remote-video" autoplay playsinline></video>
+        <video #localVideo id="local-video" autoplay playsinline [muted]=true></video>
+      </div>
+    </div>
+
+  <!-- Modal -->
+  <div class="modal fade" #rateModal id="rateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="rateModalLabel">Valora tu experiencia con la llamada</h1>
+          <img class="x" src="../assets/icons8-x-48.png" data-bs-dismiss="modal" alt="close">
+        </div>
+        <div class="modal-body d-flex flex-row justify-content-evenly">
+          <img src="../assets/icons8-star-16.png" class="star" id="star1" alt="star1" (click)="sendRating(1)" data-bs-dismiss="modal">
+          <img src="../assets/icons8-star-16.png" class="star" id="star2" alt="star2" (click)="sendRating(2)" data-bs-dismiss="modal">
+          <img src="../assets/icons8-star-16.png" class="star" id="star3" alt="star3" (click)="sendRating(3)" data-bs-dismiss="modal">
+          <img src="../assets/icons8-star-16.png" class="star" id="star4" alt="star4" (click)="sendRating(4)" data-bs-dismiss="modal">
+          <img src="../assets/icons8-star-16.png" class="star" id="star5" alt="star5" (click)="sendRating(5)" data-bs-dismiss="modal">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" #queueModal id="queueModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="queueModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="qeueDialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="queueModalLabel">Tu posición en la cola</h1>
+          <img class="x" src="../assets/icons8-x-48.png" data-bs-dismiss="modal" alt="close">
+        </div>
+        <div class="modal-body d-flex flex-row justify-content-between align-items-center">
+          <div class="d-flex flex-row align-items-center">
+            <img src="../assets/icons8-clock.gif" width="32px" height="32px" alt="clock">
+            <span class="mr15">Tiempo de espera estimado: </span>
+            <span #qeueTime id="qeueTime">2:20 min</span>
+          </div>
+          <div>
+            <img src="../assets/icons8-person-32.png" alt="person">
+            <span class="mr15">Posición en la cola: </span>
+            <span #qeuePosition id="qeuePosition">4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" #noIP id="noIP" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="noIPLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" id="noIPDialog">
+      <div class="modal-content" id="modal-content-noIp">
+        <div class="modal-header" id="modal-header-ip">
+          <h1 class="modal-title fs-5" id="noIPModalLabel">CAJERO NO DISPONIBLE</h1>
+        </div>
+        <div class="modal-body justify-content-between align-items-center">
+          <div class="d-flex flex-row align-items-center">
+            <img src="../assets/icons8-warning.gif" width="32px" height="32px" alt="clock">
+            <span class="noIp">El cajero no se encuentra disponible, por favor vuelva a intentarlo </span>
+          </div>
+          <div class="divNoIP">
+            <button id="buttonNOIP" type="button" class="btn btn-warning" (click)="reloadPage()">RECARGAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="peerToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              No se ha podido podido establecer conexión con los servidores stun
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="windowToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              Ha ocurrido un error al cambiar de ventana
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="streamToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              Ha ocurrido un error al conectarse por videollamada
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="endCallToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              Ha ocurrido un error al terminar la videollamada
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="postToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              No hay conexión con la base de datos
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="callToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+              A ocurrido un error al hacer la videollamada
+            </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+</div>
