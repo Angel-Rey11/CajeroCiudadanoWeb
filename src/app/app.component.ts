@@ -220,6 +220,19 @@ export class AppComponent implements OnInit, OnDestroy {
     myModal.show();
   }
 
+  /**
+   * Metodo para cerrar el modal de la cola cuando la llamada sea atendidad desde la web del operador
+   */
+  public closeQeue(){
+    const element = document.getElementById('queueModal') as HTMLElement;
+    const myModal = new Modal(element);
+    myModal.hide();
+  }
+
+  /**
+   * Modal que se abre cuando la IP del cajero no existe, si no existe
+   * no permite hacer ninguna función
+   */
   public openNoIPModal(){
     const element = document.getElementById('noIP') as HTMLElement;
     const myModal = new Modal(element);
