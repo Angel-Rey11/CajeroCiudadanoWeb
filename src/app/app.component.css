@@ -3,6 +3,7 @@
     background-color: #343434;
 	border-radius: 4px;
 	align-items: center;
+	width: 100%;
 }
 
 #qeueDialog  {
@@ -63,6 +64,18 @@
 	box-shadow:1px, 1px, #343434;
 	z-index: 9999;
 }
+
+#charging {
+	font-size: 30px;
+	width: 46vh;
+	height: 12vh;
+	border-radius: 50px;
+	background-color: #ffcc00;
+	color: white;
+	box-shadow:1px, 1px, #343434;
+	z-index: 9999;
+}
+
 #enCurso{
 	font-size: 25px;
 	width: 40vh;
@@ -99,4 +112,11 @@
 #postToast{
 	color: white;
 	background-color: red;
+}
+
+.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
 }

@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('qeuePosition') qeuePosition!: ElementRef<HTMLSpanElement>;
   @ViewChild('qeueTime') qeueTime!: ElementRef<HTMLSpanElement>;
   isButtonDisabled: boolean = true;
+  charging:boolean = true;
 
   public state = 0;
 
@@ -43,7 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   
   async ngOnInit(): Promise<void> {
-    //muestra loading
     try {
       this.peerId = this.callService.initPeer(); 
       await this.peticion.get("http://api.ipify.org/?format=json").subscribe((res:any)=>{
@@ -319,6 +319,9 @@ export class AppComponent implements OnInit, OnDestroy {
               this.isButtonDisabled = false;
               this.CajeroIp = data;
               environment.id_cajero = this.CajeroIp.id;
+              const spinner = document.getElementById("spinner");
+              spinner.classList.add("d-none");
+              this.charging = false;
             }
           }
         )

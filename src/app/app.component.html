@@ -1,6 +1,12 @@
+<div id="spinner" class="text-center">
+  <div class="spinner-border text-warning" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 <div class="contenedor">
   <div id="buttons" class="row p-2 col-12">
     <button #iniciar id="iniciar" mat-raised-button color="warn" class="position-absolute top-50 start-50 translate-middle" *ngIf="this.state==0" [disabled]="isButtonDisabled" (click)="startCall()">Solicitar Asistencia</button>
+    <button id="charging" mat-raised-button color="warn" class="position-absolute top-50 start-50 translate-middle" *ngIf="this.state==0 && charging">Por favor, espere ...</button>
     <button #enCurso id="enCurso" mat-raised-button color="warn" class="m-2" *ngIf="this.state==1" (click)="cancelCall()">Cancelar LLamada</button>
     <button #colgar id="colgar" mat-raised-button color="warn" class="m-2" *ngIf="this.state==2" (click)="endCall()">Terminar Llamada</button>
   </div>
@@ -43,7 +49,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="queueModalLabel">Tu posición en la cola</h1>
-          <img class="x" src="../assets/icons8-x-48.png" data-bs-dismiss="modal" alt="close">
+          <img #closeModal class="x" src="../assets/icons8-x-48.png" data-bs-dismiss="modal" alt="close">
         </div>
         <div class="modal-body d-flex flex-row justify-content-between align-items-center">
           <div class="d-flex flex-row align-items-center">
