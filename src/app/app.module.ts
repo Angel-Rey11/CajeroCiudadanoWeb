@@ -32,7 +32,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatSnackBarModule
   ],
   providers: [
-    CallService
+    CallService,AppComponent
   ],
   bootstrap: [AppComponent]
 })
